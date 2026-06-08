@@ -23,6 +23,13 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      # Turns on GitHub Pages for the repo if it is not enabled yet,
+      # so the deploy step below has somewhere to publish to.
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       # The knitr engine passes the {pyodide} cells through to the browser,
       # so the build needs R + knitr (not a Python install).
       - name: Set up R
