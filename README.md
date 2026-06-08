@@ -42,18 +42,14 @@ quarto render       # build the static site into _site/
 
 ## Deploy to GitHub Pages
 
-A workflow is included at `.github/workflows/publish.yml`. Once this folder is
-pushed to a GitHub repository:
+A workflow is included at `.github/workflows/publish.yml`. It renders the site and
+deploys it with GitHub's own Pages action, so there is no `gh-pages` branch to set
+up or maintain.
 
-1. Push to the `main` branch. The action renders the site and publishes it to the
-   `gh-pages` branch.
-2. In Settings, then Pages, set the source to the `gh-pages` branch.
-
-You can also publish from your own machine:
-
-```bash
-quarto publish gh-pages
-```
+1. In the repository, go to Settings, then Pages, and set the source to
+   "GitHub Actions".
+2. Push to the `main` branch, or re-run the workflow from the Actions tab. The
+   action renders the site and deploys it.
 
 Rendering uses the knitr engine, so it needs R and `knitr` rather than a Python
 install. The `pyodide` code cells are passed through to the browser and only run
