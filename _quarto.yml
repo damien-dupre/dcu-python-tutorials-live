@@ -1,0 +1,52 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "DCU Python Tutorials"
+  description: "Free, interactive Python tutorials that run entirely in your browser, with nothing to install."
+  site-url: "https://damien-dupre.github.io/dcu-python-tutorials-live/"
+  repo-url: "https://github.com/damien-dupre/dcu-python-tutorials-live"
+  favicon: https://damien-dupre.github.io/assets/favicon.ico
+  navbar:
+    background: primary
+    left:
+      - text: "Home"
+        href: index.qmd
+    right:
+      - text: "R version"
+        href: "https://damien-dupre.github.io/dcu-r-tutorials-live/"
+      - text: "Original (server-based)"
+        href: "https://damien-dupre.github.io/dcu-python-tutorials/"
+      - text: "GitHub"
+        href: "https://github.com/damien-dupre"
+  page-footer:
+    center: |
+      Damien Dupré, DCU Business School. Built with [Quarto](https://quarto.org) and the [quarto-live](https://r-wasm.github.io/quarto-live/) extension (Pyodide).
+
+format:
+  live-html:
+    theme:
+      - cosmo
+      - custom.scss
+    toc: true
+    toc-depth: 2
+    toc-title: "On this page"
+    smooth-scroll: true
+    highlight-style: github
+    code-copy: true
+    grid:
+      body-width: 900px
+
+engine: knitr
+
+# Pyodide runtime: packages below are installed once, client-side, when the page loads.
+# (polars is not available as a WebAssembly build, so the in-browser course uses pandas.)
+pyodide:
+  packages:
+    - pandas
+    - plotnine
+  cell-options:
+    autorun: false
+    min-lines: 4
+    completion: true

@@ -1,0 +1,309 @@
+---
+title: "DCU Python Tutorials"
+subtitle: "An interactive introduction to Python that runs in your browser"
+author: "Damien Dupré, DCU Business School"
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+Each grey box on this page is a real Python console. You can type in it, change the
+code, and run it. The Python interpreter (a build called Pyodide) has been compiled
+to run inside your web browser, so there is nothing to install, no account to
+create, and no server to connect to.
+
+A few things worth knowing before you start:
+
+- Edit the code in a box, then press Run Code to see what it produces.
+- Where you see `______` in the code, replace it with the missing piece. The
+  comments next to it tell you what is expected.
+- If you get stuck, use the Show Hints or Show Solution buttons under each exercise.
+
+The first time you run a box, Python needs a few seconds to start up and download
+the packages it uses (pandas and plotnine). That only happens once, so please be
+patient.
+
+## Getting started
+
+Let us check that everything is working. Just press Run Code on the box below.
+
+```{pyodide}
+#| autorun: false
+#| caption: Your first line of Python
+# Anything after a '#' is a comment, so Python ignores it.
+print("Hello World")
+```
+
+If `Hello World` appeared underneath, then Python is running in your browser and
+you are ready to go.
+
+# Chapter 1: Python basics
+
+This chapter covers the pieces you will reach for again and again: variables,
+lists, and dictionaries. You do not need any extra package here, since all of this
+is plain Python.
+
+## Variables and f-strings
+
+A variable stores a value with `=` so that you can use it again later. An f-string,
+which is text written as `f"..."`, lets you drop a variable straight into the text
+by putting its name in curly braces. In each exercise below, replace every `______`
+using the values described in the comments.
+
+```{pyodide}
+#| exercise: py_vars
+# 1. Store your age (a number) and your name (text, in quotes)
+my_age  = ______
+my_name = "______"
+
+# 2. Print a greeting that uses both variables
+print(f"My name is {my_name} and I am {my_age} years old")
+
+# 3. Make a list of numbers and count how many there are with len()
+my_numbers = [1, 2, 3, 4, 5]
+print("Length:", ______(my_numbers))
+```
+
+::: { .hint exercise="py_vars" }
+- Text needs quotes, like `"Damien"`, while a number does not, like `25`.
+- `len(my_numbers)` returns how many items are in the list.
+:::
+
+```{pyodide}
+#| exercise: py_vars
+#| solution: true
+my_age  = 25
+my_name = "Damien"
+
+print(f"My name is {my_name} and I am {my_age} years old")
+
+my_numbers = [1, 2, 3, 4, 5]
+print("Length:", len(my_numbers))
+```
+
+## Lists and dictionaries
+
+A list is an ordered collection written in square brackets `[ ]`, and you reach
+into it by position. Python counts from 0, so the second item is `[1]`, not `[2]`.
+A dictionary stores values under named keys, written in curly braces `{ }`.
+
+```{pyodide}
+#| exercise: py_lists
+#| min-lines: 14
+# 1. Make a list of the 4 provinces of Ireland
+provinces = [______, ______, ______, ______]
+
+# 2. Print the SECOND province (remember: indexing starts at 0!)
+print(provinces[______])
+
+# 3. Count the provinces with len(), and add the numbers with sum()
+print("Number of provinces:", ______(provinces))
+
+numbers = [10, 20, 30, 40, 50]
+print("Sum:", ______(numbers))
+
+# 4. Fill in this student's name and age, then print them
+student = {"name": "______", "age": ______, "course": "Business Analytics"}
+print(student["name"], "is", student["age"], "years old")
+```
+
+::: { .hint exercise="py_lists" }
+- The four provinces are `"Connacht"`, `"Leinster"`, `"Munster"`, and `"Ulster"`.
+- The second province is `provinces[1]`, not `provinces[2]`.
+- `len()` counts the items, and `sum()` adds them up.
+:::
+
+```{pyodide}
+#| exercise: py_lists
+#| solution: true
+provinces = ["Connacht", "Leinster", "Munster", "Ulster"]
+
+print(provinces[1])
+
+print("Number of provinces:", len(provinces))
+
+numbers = [10, 20, 30, 40, 50]
+print("Sum:", sum(numbers))
+
+student = {"name": "Alice", "age": 21, "course": "Business Analytics"}
+print(student["name"], "is", student["age"], "years old")
+```
+
+# Chapter 2: Data wrangling with pandas
+
+Now for some real data. From here on we will use the gapminder dataset, which
+records life expectancy, population, and GDP per capita for most countries between
+1952 and 2007. We read it straight from the web with pandas, the standard Python
+library for working with tables (which pandas calls DataFrames).
+
+> A quick note on Polars and pandas. The classroom version of this course uses
+> Polars. Polars is written in Rust and has no WebAssembly build, so it cannot run
+> inside the browser. For this in-browser edition we use pandas instead, which
+> Pyodide includes out of the box. The ideas are the same in both: filter rows,
+> pick columns, and group.
+
+Run the box below to load the data and take a first look.
+
+```{pyodide}
+#| autorun: false
+#| caption: Load the gapminder data from the web
+import pandas as pd
+
+gapminder = pd.read_csv(
+    "https://raw.githubusercontent.com/damien-dupre/data/refs/heads/master/gapminder.csv"
+)
+gapminder.head()
+```
+
+The columns are `country`, `continent`, `year`, `lifeExp`, `pop`, and `gdpPercap`.
+
+## Filter rows and select columns
+
+You filter rows with a condition inside square brackets, and you select columns by
+passing a list of their names.
+
+```{pyodide}
+#| exercise: py_filter
+#| setup: true
+import pandas as pd
+gapminder = pd.read_csv("https://raw.githubusercontent.com/damien-dupre/data/refs/heads/master/gapminder.csv")
+```
+
+```{pyodide}
+#| exercise: py_filter
+#| min-lines: 6
+# 1. Keep only the rows for the year 2007 where population is over 100 million
+gapminder[(gapminder["year"] == ______) & (gapminder["pop"] > ______)]
+
+# 2. Keep only the country and lifeExp columns
+gapminder[[______, ______]]
+```
+
+::: { .hint exercise="py_filter" }
+- One hundred million is written `100000000`, with no commas in Python.
+- To choose columns you pass their names as strings in a list, like `["country", "lifeExp"]`.
+:::
+
+```{pyodide}
+#| exercise: py_filter
+#| solution: true
+gapminder[(gapminder["year"] == 2007) & (gapminder["pop"] > 100000000)]
+
+gapminder[["country", "lifeExp"]]
+```
+
+## Group and summarise
+
+`groupby()` splits the table into groups. You then pick a column and apply a
+summary such as `.mean()`, which answers questions like "what is the average life
+expectancy on each continent?".
+
+```{pyodide}
+#| exercise: py_groupby
+#| setup: true
+import pandas as pd
+gapminder = pd.read_csv("https://raw.githubusercontent.com/damien-dupre/data/refs/heads/master/gapminder.csv")
+```
+
+```{pyodide}
+#| exercise: py_groupby
+# Mean life expectancy per continent, for the year 2007:
+(
+    gapminder[gapminder["year"] == ______]
+    .groupby("______")["______"]
+    .mean()
+)
+```
+
+::: { .hint exercise="py_groupby" }
+- Filter to `year == 2007`, group by `"continent"`, then take the `.mean()` of `"lifeExp"`.
+:::
+
+```{pyodide}
+#| exercise: py_groupby
+#| solution: true
+(
+    gapminder[gapminder["year"] == 2007]
+    .groupby("continent")["lifeExp"]
+    .mean()
+)
+```
+
+# Chapter 3: Visualisation with plotnine
+
+`plotnine` brings the grammar of graphics to Python, which is the same approach as
+ggplot2 in R. You start from the data, map variables to things you can see (the x
+position, the y position, the colour, and so on) with `aes()`, and then add a
+geometry such as `geom_point()` to draw them.
+
+```{pyodide}
+#| exercise: py_plot
+#| setup: true
+import pandas as pd
+gapminder = pd.read_csv("https://raw.githubusercontent.com/damien-dupre/data/refs/heads/master/gapminder.csv")
+```
+
+```{pyodide}
+#| exercise: py_plot
+#| min-lines: 12
+# Recreate the chart Hans Rosling made well known, for the year 2007:
+# wealth (gdpPercap, on a log scale) against health (lifeExp),
+# with one colour per continent.
+from plotnine import ggplot, aes, geom_point, scale_x_log10, labs, theme_minimal
+
+df = gapminder[gapminder["year"] == 2007]
+
+(
+    ggplot(df, aes(x="______", y="______", color="______"))
+    + geom_point(size=2, alpha=0.7)
+    + scale_x_log10()
+    + labs(
+        title="Wealth and health across the world, 2007",
+        x="GDP per capita (log scale)",
+        y="Life expectancy (years)",
+        color="Continent",
+    )
+    + theme_minimal()
+)
+```
+
+::: { .hint exercise="py_plot" }
+- Map `"gdpPercap"` to `x`, `"lifeExp"` to `y`, and `"continent"` to `color`.
+- In plotnine the column names go in quotes inside `aes()`.
+:::
+
+```{pyodide}
+#| exercise: py_plot
+#| solution: true
+from plotnine import ggplot, aes, geom_point, scale_x_log10, labs, theme_minimal
+
+df = gapminder[gapminder["year"] == 2007]
+
+(
+    ggplot(df, aes(x="gdpPercap", y="lifeExp", color="continent"))
+    + geom_point(size=2, alpha=0.7)
+    + scale_x_log10()
+    + labs(
+        title="Wealth and health across the world, 2007",
+        x="GDP per capita (log scale)",
+        y="Life expectancy (years)",
+        color="Continent",
+    )
+    + theme_minimal()
+)
+```
+
+# Where to go next
+
+You have just filtered, summarised, and plotted real data without installing
+anything on your machine. There is of course a lot more to Python than this, and
+the only way to get comfortable with it is to keep writing and running code.
+
+If you would like the longer version of this course, the original one (which runs
+on a server) is at
+[dcu-python-tutorials](https://damien-dupre.github.io/dcu-python-tutorials/). If
+you prefer R, the same ideas are in the
+[R live tutorials](https://damien-dupre.github.io/dcu-r-tutorials-live/).
+
+One last thing: every box on this page keeps your edits for as long as the tab is
+open, so do feel free to experiment. If you want the original code back, press
+Start Over on the exercise.

@@ -1,0 +1,16 @@
+# Quarto build artifacts
+/_site/
+/.quarto/
+*_files/
+*_cache/
+
+# RStudio
+/.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# macOS
+.DS_Store
+
+**/*.quarto_ipynb

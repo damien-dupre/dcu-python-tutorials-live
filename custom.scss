@@ -1,0 +1,36 @@
+/*-- scss:defaults --*/
+
+// Accent colour carried over from the original DCU Python Tutorials theme
+$primary:   #2563eb;
+$link-color: #1d4ed8;
+
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+$font-family-monospace:  "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+
+$toc-font-size: 0.85rem;
+
+/*-- scss:rules --*/
+
+// A little more air around the interactive consoles
+.exercise-cell,
+.cell.pyodide,
+div[id^="pyodide-"] {
+  margin-block: 1.25rem;
+}
+
+// Make the editor blocks feel like first-class content
+.cm-editor {
+  border-radius: 6px;
+}
+
+h1 {
+  border-bottom: 2px solid rgba($primary, 0.25);
+  padding-bottom: 0.3rem;
+  margin-top: 2.5rem;
+}
+
+// Subtle tint on the page title block
+#title-block-header .quarto-title {
+  border-left: 5px solid $primary;
+  padding-left: 1rem;
+}
